@@ -84,7 +84,7 @@
                         </div>
                         <i class="fas fa-usd">{{flight.price}}</i>
                         <br>
-                        <a class="btn btn-secondary btn-lg mt-2">
+                        <a class="btn btn-secondary btn-lg mt-2" [routerLink]="['/book-ticket', flight.id]">
                             <i class="fa fa-ticket">
                                 Book
                             </i>

@@ -7,12 +7,14 @@ import { AppComponent } from './app.component';
 import { NavMenuComponent } from './nav-menu/nav-menu.component';
 import { AppRoutingModule } from './app-routing.module';
 import { SearchFlightsComponent } from './search-flights/search-flights.component';
+import { BookTicketComponent } from './book-ticket/book-ticket.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     NavMenuComponent,
     SearchFlightsComponent,
+    BookTicketComponent,
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),

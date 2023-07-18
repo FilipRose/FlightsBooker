@@ -7,18 +7,12 @@ namespace Flights.Controllers
     [Route("[controller]")]
     public class FlightsController : ControllerBase
     {
-        Random random = new Random();
 
         private readonly ILogger<FlightsController> _logger;
 
-        public FlightsController(ILogger<FlightsController> logger)
-        {
-            _logger = logger;
-        }
+        static Random random = new Random();
 
-        [HttpGet]
-        public IEnumerable<FlightModel> Search()
-            => new FlightModel[]
+        static private FlightModel[] flights = new FlightModel[]
             {
                 new (
                     Guid.NewGuid(),
@@ -54,8 +48,39 @@ namespace Flights.Controllers
                     random.Next(80,500).ToString(),
                     new TimePlaceModel("Boston", DateTime.Now.AddHours(random.Next(1,3))),
                     new TimePlaceModel("Texas", DateTime.Now.AddHours(random.Next(1,3))),
-                    random.Next(1, 600)),        
+                    random.Next(1, 600)),
             };
-       
+
+        public FlightsController(ILogger<FlightsController> logger)
+        {
+            _logger = logger;
+        }
+
+        [HttpGet]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [ProducesResponseType(typeof(IEnumerable<FlightModel>), 200)]
+        public IEnumerable<FlightModel> Search()
+            => flights;
+
+
+        [HttpGet("{id}")]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [ProducesResponseType(typeof (FlightModel), 200)]
+        public ActionResult<FlightModel> Find(Guid id)
+        {
+            var flight = flights.SingleOrDefault(f => f.Id == id);
+
+            if(flight == null)
+            {
+              return NotFound();
+            }
+
+            return Ok(flight);
+        } 
+
+
     }
 }
