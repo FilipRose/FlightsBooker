@@ -57,17 +57,17 @@ namespace Flights.Controllers
         }
 
         [HttpGet]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(500)]
         [ProducesResponseType(typeof(IEnumerable<FlightModel>), 200)]
         public IEnumerable<FlightModel> Search()
             => flights;
 
 
         [HttpGet("{id}")]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(500)]
         [ProducesResponseType(typeof (FlightModel), 200)]
         public ActionResult<FlightModel> Find(Guid id)
         {

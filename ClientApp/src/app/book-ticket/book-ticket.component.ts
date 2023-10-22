@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, } from '@angular/router';
 import { FlightsService } from '../api/services';
 import { FlightModel } from '../api/models';
+import { Router } from '@angular/router';
+import { AuthService } from '../auth/auth.service';
 
 @Component({
   selector: 'app-book-ticket',
@@ -15,11 +17,19 @@ export class BookTicketComponent implements OnInit {
   constructor(
     private _route: ActivatedRoute,
     private _router: Router,
-    private _flightService: FlightsService
+    private _flightService: FlightsService,
+    private _authService: AuthService
   ) {}
 
   ngOnInit(): void {
     this.flightIdSub();
+    this.isNotRegister();
+  }
+
+  private isNotRegister() {
+    if(!this._authService.currentUser) {
+      this._router.navigate(['/register']);
+    }
   }
 
   private findFlight = (flightId: string | null) => {
@@ -36,9 +46,10 @@ export class BookTicketComponent implements OnInit {
       this._router.navigate(['/search-flights']);
     }
 
-    console.log("Response Error. Status", err.status);
-    console.log("Response Error. Status Text", err.statusText);
-    console.log(err);
+    if(err.status == 400) {
+      alert("400 Bad Request to the server!");
+      this._router.navigate(['/search-flights']);
+    }
   }
 
   flightIdSub() {
