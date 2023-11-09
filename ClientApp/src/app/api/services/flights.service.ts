@@ -10,6 +10,7 @@ import { ApiConfiguration } from '../api-configuration';
 import { StrictHttpResponse } from '../strict-http-response';
 import { RequestBuilder } from '../request-builder';
 
+import { BookDto } from '../models/book-dto';
 import { FlightModel } from '../models/flight-model';
 
 @Injectable({ providedIn: 'root' })
@@ -100,6 +101,53 @@ export class FlightsService extends BaseService {
   ): Observable<Array<FlightModel>> {
     return this.searchFlights$Response(params, context).pipe(
       map((r: StrictHttpResponse<Array<FlightModel>>): Array<FlightModel> => r.body)
+    );
+  }
+
+  /** Path part for operation `bookFlights()` */
+  static readonly BookFlightsPath = '/Flights';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `bookFlights()` instead.
+   *
+   * This method sends `application/*+json` and handles request body of type `application/*+json`.
+   */
+  bookFlights$Response(
+    params?: {
+      body?: BookDto
+    },
+    context?: HttpContext
+  ): Observable<StrictHttpResponse<void>> {
+    const rb = new RequestBuilder(this.rootUrl, FlightsService.BookFlightsPath, 'post');
+    if (params) {
+      rb.body(params.body, 'application/*+json');
+    }
+
+    return this.http.request(
+      rb.build({ responseType: 'text', accept: '*/*', context })
+    ).pipe(
+      filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return (r as HttpResponse<any>).clone({ body: undefined }) as StrictHttpResponse<void>;
+      })
+    );
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `bookFlights$Response()` instead.
+   *
+   * This method sends `application/*+json` and handles request body of type `application/*+json`.
+   */
+  bookFlights(
+    params?: {
+      body?: BookDto
+    },
+    context?: HttpContext
+  ): Observable<void> {
+    return this.bookFlights$Response(params, context).pipe(
+      map((r: StrictHttpResponse<void>): void => r.body)
     );
   }
 

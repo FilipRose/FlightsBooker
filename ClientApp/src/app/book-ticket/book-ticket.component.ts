@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, } from '@angular/router';
 import { FlightsService } from '../api/services';
-import { FlightModel } from '../api/models';
+import { BookDto, FlightModel } from '../api/models';
 import { Router } from '@angular/router';
 import { AuthService } from '../auth/auth.service';
+import { FormBuilder } from '@angular/forms';
 
 @Component({
   selector: 'app-book-ticket',
@@ -14,11 +15,16 @@ export class BookTicketComponent implements OnInit {
   flightId: string = 'not loaded';
   flight: FlightModel = {};
 
+  formFlight = this._formBuilder.group({
+    number: [1]
+  })
+
   constructor(
     private _route: ActivatedRoute,
     private _router: Router,
     private _flightService: FlightsService,
-    private _authService: AuthService
+    private _authService: AuthService,
+    private _formBuilder: FormBuilder
   ) {}
 
   ngOnInit(): void {
@@ -54,5 +60,15 @@ export class BookTicketComponent implements OnInit {
 
   flightIdSub() {
     this._route.paramMap.subscribe((p) => this.findFlight(p.get('flightId')));
+  }
+
+  bookFlight(): void {
+   const booking: BookDto  = {
+    flightId : this.flight.id,
+    passengerEamil: this._authService.currentUser?.email,
+    numberOfSeats: this.formFlight.get('number')?.value as number
+   }
+   this._flightService.bookFlights({body: booking})
+   .subscribe( _ => console.log("succeded", console.error))
   }
 }

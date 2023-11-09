@@ -1,5 +1,6 @@
 ﻿using Flights.Models;
 using Microsoft.AspNetCore.Mvc;
+using Flights.Dtos;
 
 namespace Flights.Controllers
 {
@@ -51,6 +52,8 @@ namespace Flights.Controllers
                     random.Next(1, 600)),
             };
 
+        static private IList<BookDto> Bookings = new List<BookDto>();
+
         public FlightsController(ILogger<FlightsController> logger)
         {
             _logger = logger;
@@ -79,8 +82,13 @@ namespace Flights.Controllers
             }
 
             return Ok(flight);
-        } 
+        }
 
-
+        [HttpPost]
+        public void Book(BookDto dto)
+        {
+            System.Diagnostics.Debug.WriteLine($"Booking a new flight {dto.FlightId}");
+            Bookings.Add(dto);
+        }
     }
 }
