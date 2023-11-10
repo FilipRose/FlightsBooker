@@ -9,6 +9,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { SearchFlightsComponent } from './search-flights/search-flights.component';
 import { BookTicketComponent } from './book-ticket/book-ticket.component';
 import { RegistrationComponent } from './registration/registration.component';
+import { MyBookingsComponent } from './my-bookings/my-bookings.component';
 
 @NgModule({
   declarations: [
@@ -16,7 +17,8 @@ import { RegistrationComponent } from './registration/registration.component';
     NavMenuComponent,
     SearchFlightsComponent,
     BookTicketComponent,
-    RegistrationComponent
+    RegistrationComponent,
+    MyBookingsComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),

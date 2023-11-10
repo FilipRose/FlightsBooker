@@ -69,6 +69,6 @@ export class BookTicketComponent implements OnInit {
     numberOfSeats: this.formFlight.get('number')?.value as number
    }
    this._flightService.bookFlights({body: booking})
-   .subscribe( _ => console.log("succeded", console.error))
+   .subscribe( _ => (this._router.navigate(['/book-list']), this.handleError));
   }
 }
